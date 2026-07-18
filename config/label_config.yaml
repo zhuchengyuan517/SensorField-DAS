@@ -1,0 +1,155 @@
+random_seed: 20260511
+quality:
+  nan_ratio_threshold: 0.2
+dataset:
+  name: PipeDAS-Multi
+  version: v1.0
+  anonymization_level: public_release
+  source_description: Anonymized DAS signals from multiple acquisition batches, sampling configurations, and soil conditions.
+  public_release_note: Sensitive pipeline attributes, pipe diameter, original paths, dates, locations, and defense-zone identifiers are removed or anonymized.
+batch_map:
+  "0715": B001
+  "0716": B002
+label_maps:
+  event_type:
+    background_noise: 0
+    pipeline_leakage: 1
+    mechanical_excavation: 2
+    manual_work: 3
+    vehicle_passing: 4
+  fine_event:
+    N/A: 0
+    unknown: 1
+    excavator_idle: 2
+    knocking: 3
+    digging: 4
+    parallel_driving: 5
+    crossing: 6
+    vehicle_passing: 7
+    manual_digging: 8
+    manual_walking: 9
+    vehicle_idle: 10
+  soil_condition:
+    land: 0
+    sand: 1
+    stone: 2
+    unknown: 3
+aliases:
+  background:
+    - background
+    - bg
+    - noise
+    - normal
+    - 正常
+    - 背景
+  leakage:
+    - leak
+    - leakage
+    - 泄漏
+  vehicle:
+    - 汽车
+    - 车
+    - vehicle
+    - car
+  manual:
+    - human
+    - manual
+    - 人工
+    - 行走
+    - chutou
+    - 锄头
+    - 人
+  mechanical:
+    - excavator
+    - 挖掘
+    - 开挖
+    - 施工
+    - 敲击
+    - 敲地面
+    - 怠速
+    - 切削
+    - 平行行驶
+    - 垂直管道行驶
+  fine_event:
+    idle:
+      - 怠速
+      - idle
+    knocking:
+      - 敲击
+      - 敲地面
+      - 敲击定位
+      - 敲击地面
+      - 敲击地面定位
+      - knock
+      - knocking
+    digging:
+      - 挖掘
+      - 挖掘施工
+      - 开挖
+      - 开挖施工
+      - 施工
+      - 正常施工
+      - 挖掘切削
+      - manual_digging
+      - digging
+      - cutting
+      - chutou
+      - 锄头
+    parallel:
+      - 平行行驶
+      - parallel
+    crossing:
+      - crossing
+      - vertical
+      - 垂直
+      - 垂直管道行驶
+      - 近
+      - 远
+    walking:
+      - 行走
+      - 2人行走
+      - 3人对着行走
+      - 1人行走
+      - 人行走
+    vehicle_passing:
+      - 汽车经过
+      - vehicle_passing
+      - 行驶
+      - 汽车行驶
+distance:
+  default_label: N/A
+  unresolved_label: unknown
+anonymization:
+  segment_prefix: SEG
+  public_file_prefix: PUB
+  diameter_patterns:
+    - "(?i)dn\\d+"
+    - "(?i)d\\d{2,4}"
+    - "(?i)φ\\s*\\d+"
+    - "(?i)ø\\s*\\d+"
+    - "(?i)\\d+\\s*mm"
+    - "(?i)diameter\\s*\\d+"
+inspection:
+  max_unrecognized_examples: 200
+signal_extraction:
+  event_window_rows:
+    background_noise: 1
+    pipeline_leakage: 10
+    mechanical_excavation: 6
+    manual_work: 1
+    vehicle_passing: 10
+  fine_event_window_rows:
+    excavator_idle: 6
+    knocking: 6
+    digging: 6
+    parallel_driving: 6
+    crossing: 6
+    vehicle_passing: 10
+    manual_digging: 1
+    manual_walking: 1
+    vehicle_idle: 10
+  background_per_event: 3
+  background_guard_rows: 1
+  candidate_stride_mode: window
+  skip_explicit_background_files: true
+  skip_unresolved_events: true

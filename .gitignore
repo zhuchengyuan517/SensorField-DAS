@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Git / OS / editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Raw datasets and generated releases
+converted_csv/
+public_dataset_release/
+_datasets/
+
+# Large or derived artifacts
+output/
+tmp/
+tmp_*/
+_tmp_*/
+examples/
+fiber_traffic_benchmark/
+libmtl_das_patch/
+paper_assets/
+paper_sections/
+representative_modalities_single/
+representative_multimodal_samples/
+reviewer_friendly_samples*/
+table2_confusion_matrices*/
+_external_models/
+
+# Generated figures, tables, and logs
+*.log
+*.err
+*.out
+*.h5
+*.npy
+*.npz
+*.pt
+*.pth
+
+# Local scratch documents
+_tmp_docx_*.txt
+*.docx
+
+# One-off root-level generated artifacts
+converted_csv.png
+converted_csv_features.json
+fig_z1_view_contributions.pdf
+fig_z1_view_contributions.png
+fig_z1_view_contributions_metrics.csv
+sensorfield_m3t_results_preview.tex
