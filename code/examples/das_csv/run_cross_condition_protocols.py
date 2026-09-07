@@ -11,7 +11,7 @@ from pathlib import Path
 
 CURRENT_DIR = Path(__file__).resolve().parent
 WORKSPACE_ROOT = CURRENT_DIR.parents[2]
-DEFAULT_ENTRY = CURRENT_DIR / "pipemmtl_main.py"
+DEFAULT_ENTRY = CURRENT_DIR / "train_sensorfield_m3t.py"
 DEFAULT_SPLIT_ROOT = WORKSPACE_ROOT / "converted_csv" / "sensorfield_mtl43_condition_splits_strict"
 DEFAULT_OUTPUT_ROOT = (
     WORKSPACE_ROOT

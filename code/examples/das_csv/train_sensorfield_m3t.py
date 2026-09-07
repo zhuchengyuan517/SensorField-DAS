@@ -38,7 +38,7 @@ if str(CURRENT_DIR) not in sys.path:
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(1, str(PROJECT_ROOT))
 
-from create_dataset import (
+from sensorfield_dataset import (
     DISTANCE_IGNORE_INDEX,
     audit_dataset_manifests,
     canonicalize_dataset_manifests,
@@ -52,7 +52,7 @@ from LibMTL.model.condition_baselines import build_condition_baseline
 from sensorfield_metrics import attach_task_metrics, classification_metrics, metric_rows
 
 DEFAULT_DATASET_PATH = WORKSPACE_ROOT / "converted_csv" / "MTL43"
-DEFAULT_SAVE_PATH = PROJECT_ROOT / "examples" / "das_csv" / "runs" / "pipemmtl_mtl43"
+DEFAULT_SAVE_PATH = PROJECT_ROOT / "examples" / "das_csv" / "runs" / "sensorfield_m3t"
 DEFAULT_LOCATION_IMAGE_ROOT = WORKSPACE_ROOT / "_datasets" / "location_images"
 
 

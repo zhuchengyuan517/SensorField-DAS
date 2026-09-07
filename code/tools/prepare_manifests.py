@@ -7,7 +7,7 @@ from collections import defaultdict
 from pathlib import Path
 
 
-DATASET_ROOT = Path(__file__).resolve().parent / "converted_csv" / "MTL43"
+DATASET_ROOT = Path(__file__).resolve().parents[2] / "converted_csv" / "MTL43"
 TRAIN_RATIO = 0.7
 VAL_RATIO = 0.2
 TEST_RATIO = 0.1

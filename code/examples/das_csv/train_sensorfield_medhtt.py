@@ -19,8 +19,8 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-LIB_ROOT = PROJECT_ROOT / "libmtl_das_patch"
+PROJECT_ROOT = Path(__file__).resolve().parents[3]
+LIB_ROOT = PROJECT_ROOT / "code"
 if str(LIB_ROOT) not in sys.path:
     sys.path.insert(0, str(LIB_ROOT))
 

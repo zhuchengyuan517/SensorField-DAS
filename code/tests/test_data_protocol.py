@@ -14,7 +14,7 @@ for path in (PROJECT_ROOT, EXAMPLES_DIR):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
-from create_dataset import (  # noqa: E402
+from sensorfield_dataset import (  # noqa: E402
     DISTANCE_IGNORE_INDEX,
     MultiTaskCSVDataset,
     canonicalize_dataset_manifests,

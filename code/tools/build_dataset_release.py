@@ -16,7 +16,7 @@ import numpy as np
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EVENT_MAP = {"background": 0, "walking": 1, "excavator": 2, "driving": 3}
 EVENT_PUBLIC_NAMES = {
     "background": "background_noise",

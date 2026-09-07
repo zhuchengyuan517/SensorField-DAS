@@ -15,10 +15,10 @@ The canonical machine-readable description is `config/sensorfield_m3t_submission
 | Paper benchmark | `converted_csv/MTL43/` |
 | IID manifests | `converted_csv/MTL43/{train,val,test}.csv` |
 | Strict condition splits | `converted_csv/sensorfield_mtl43_condition_splits_strict/` |
-| CSV dataset and Raw/STF/GAF construction | `libmtl_das_patch/examples/das_csv/create_dataset.py` |
-| Condition-disjoint split builder | `libmtl_das_patch/examples/das_csv/build_sensorfield_condition_splits.py` |
-| Submission alignment audit | `scripts/audit_submission_alignment.py` |
-| Paper-aligned HDF5 builder | `scripts/build_sensorfield_hdf5.py` |
+| CSV dataset and Raw/STF/GAF construction | `code/examples/das_csv/sensorfield_dataset.py` |
+| Condition-disjoint split builder | `code/examples/das_csv/build_condition_splits.py` |
+| Submission alignment audit | `code/tools/audit_dataset_alignment.py` |
+| Paper-aligned HDF5 builder | `code/tools/build_dataset_release.py` |
 | Generated public dataset | `public_dataset_release/SensorField_DAS_v1.h5` |
 
 The root `scripts/build_hdf5_dataset.py`, `src/`, and `config/label_config.yaml` belong to the earlier five-class PipeDAS workflow and are retained only for provenance. The legacy `PipeDAS_Multi_v1.h5` artifact has been removed; `SensorField_DAS_v1.h5` is the paper-aligned local package.
@@ -27,13 +27,14 @@ The root `scripts/build_hdf5_dataset.py`, `src/`, and `config/label_config.yaml`
 
 | Purpose | Canonical local path |
 | --- | --- |
-| SensorField-M3T model | `libmtl_das_patch/LibMTL/model/sensorfield_m3t.py` |
-| Training and evaluation entry | `libmtl_das_patch/examples/das_csv/pipemmtl_main.py` |
-| Metrics and MTLScore | `libmtl_das_patch/examples/das_csv/sensorfield_metrics.py` |
-| Multi-seed protocol runner | `libmtl_das_patch/examples/das_csv/sensorfield_m3t_mtl43_multiseed_runner.py` |
-| Cross-condition runner | `libmtl_das_patch/examples/das_csv/run_cross_condition_baselines.py` |
-| Core model tests | `libmtl_das_patch/tests/test_sensorfield_m3t.py` |
-| Data/protocol tests | `libmtl_das_patch/tests/test_sensorfield_tpami_protocol.py` |
+| SensorField-M3T model | `code/LibMTL/model/sensorfield_m3t.py` |
+| Training and evaluation entry | `code/examples/das_csv/train_sensorfield_m3t.py` |
+| Metrics and MTLScore | `code/examples/das_csv/sensorfield_metrics.py` |
+| Submission protocol runner | `code/examples/das_csv/run_submission_protocol.py` |
+| Multi-seed protocol runner | `code/examples/das_csv/run_multiseed_experiments.py` |
+| Cross-condition runner | `code/examples/das_csv/run_cross_condition_protocols.py` |
+| Core model tests | `code/tests/test_sensorfield_m3t.py` |
+| Data/protocol tests | `code/tests/test_data_protocol.py` |
 
 ## Paper-Facing Input and Task Contract
 
@@ -59,11 +60,8 @@ The current executable path is aligned as follows:
 ## Recommended Local Checks
 
 ```powershell
-python scripts/audit_submission_alignment.py
-python -m unittest `
-  libmtl_das_patch.tests.test_sensorfield_m3t `
-  libmtl_das_patch.tests.test_sensorfield_tpami_protocol `
-  libmtl_das_patch.tests.test_build_sensorfield_condition_splits
+python code/tools/audit_dataset_alignment.py
+python -m unittest discover -s code/tests -p "test_*.py"
 ```
 
 The audit writes a local JSON report under `output/`; generated data, checkpoints, results, and private paths remain excluded from version control.

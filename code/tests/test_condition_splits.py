@@ -1,6 +1,13 @@
+import sys
 import unittest
+from pathlib import Path
 
-from examples.das_csv.build_sensorfield_condition_splits import (
+
+CODE_ROOT = Path(__file__).resolve().parents[1]
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
+
+from examples.das_csv.build_condition_splits import (
     _extract_batch_id,
     _extract_region_descriptor,
     _extract_soil_condition,

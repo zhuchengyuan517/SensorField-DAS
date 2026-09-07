@@ -10,7 +10,7 @@ from pathlib import Path
 CURRENT_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = CURRENT_DIR.parents[1]
 WORKSPACE_ROOT = CURRENT_DIR.parents[2]
-DEFAULT_ENTRY_SCRIPT = CURRENT_DIR / "pipemmtl_main.py"
+DEFAULT_ENTRY_SCRIPT = CURRENT_DIR / "train_sensorfield_m3t.py"
 DEFAULT_SAVE_ROOT = WORKSPACE_ROOT / "results" / f"sensorfield_m3t_tpami_v2_{datetime.now().strftime('%Y%m%d_%H%M%S')}" / "runs"
 DEFAULT_DATASET_ROOT = WORKSPACE_ROOT / "converted_csv" / "MTL43"
 DEFAULT_CONDITION_SPLIT_ROOT = WORKSPACE_ROOT / "converted_csv" / "sensorfield_mtl43_condition_splits_strict"

@@ -134,19 +134,17 @@ The paper-facing training protocol uses AdamW for 80 epochs, batch size 8, learn
 |-- docs/
 |   |-- dataset_card.md
 |   `-- repository_organization.md
-|-- libmtl_das_patch/
+|-- code/
 |   |-- LibMTL/model/sensorfield_m3t.py
-|   |-- examples/das_csv/create_dataset.py
-|   |-- examples/das_csv/pipemmtl_main.py
-|   `-- examples/das_csv/sensorfield_metrics.py
-|-- scripts/
-|   |-- audit_submission_alignment.py
-|   |-- build_sensorfield_hdf5.py
+|   |-- examples/das_csv/sensorfield_dataset.py
+|   |-- examples/das_csv/train_sensorfield_m3t.py
+|   |-- examples/das_csv/run_submission_protocol.py
+|   |-- tests/
+|   `-- tools/
+|-- scripts/                              # legacy analysis utilities
 |   |-- inspect_filenames.py
-|   |-- build_hdf5_dataset.py
-|   |-- validate_hdf5.py
-|   `-- dataset_loader_example.py
-|-- src/
+|   `-- build_hdf5_dataset.py
+|-- src/                                  # legacy release modules
 |   |-- anonymizer.py
 |   |-- hdf5_writer.py
 |   |-- label_parser.py
@@ -168,16 +166,13 @@ python -m pip install -r requirements-model.txt
 Audit the local assets against the current submission:
 
 ```powershell
-python scripts/audit_submission_alignment.py
+python code/tools/audit_dataset_alignment.py
 ```
 
 Run focused model and protocol tests:
 
 ```powershell
-python -m unittest `
-  libmtl_das_patch.tests.test_sensorfield_m3t `
-  libmtl_das_patch.tests.test_sensorfield_tpami_protocol `
-  libmtl_das_patch.tests.test_build_sensorfield_condition_splits
+python -m unittest discover -s code/tests -p "test_*.py"
 ```
 
 ## HDF5 Release
@@ -185,7 +180,7 @@ python -m unittest `
 Build the paper-aligned SensorField-DAS package from the curated manifests:
 
 ```powershell
-python scripts/build_sensorfield_hdf5.py `
+python code/tools/build_dataset_release.py `
   --dataset-root "<PRIVATE_CSV_ROOT>\MTL43" `
   --condition-root "<PRIVATE_CSV_ROOT>\sensorfield_mtl43_condition_splits_strict" `
   --output "<LOCAL_OUTPUT_ROOT>\SensorField_DAS_v1.h5" `
@@ -195,7 +190,7 @@ python scripts/build_sensorfield_hdf5.py `
 Validate its structure, paper-reported counts, vehicle record shape, source-group isolation, label maps, and metadata safety:
 
 ```powershell
-python scripts/validate_hdf5.py `
+python code/tools/validate_dataset_release.py `
   --h5 "<LOCAL_OUTPUT_ROOT>\SensorField_DAS_v1.h5"
 ```
 

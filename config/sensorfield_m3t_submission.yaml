@@ -80,9 +80,9 @@ training_reported_in_submission:
 local_paths:
   benchmark_root: converted_csv/MTL43
   condition_split_root: converted_csv/sensorfield_mtl43_condition_splits_strict
-  model: libmtl_das_patch/LibMTL/model/sensorfield_m3t.py
-  dataset_loader: libmtl_das_patch/examples/das_csv/create_dataset.py
-  training_entry: libmtl_das_patch/examples/das_csv/pipemmtl_main.py
-  condition_split_builder: libmtl_das_patch/examples/das_csv/build_sensorfield_condition_splits.py
-  cross_condition_runner: libmtl_das_patch/examples/das_csv/run_cross_condition_baselines.py
-  metrics: libmtl_das_patch/examples/das_csv/sensorfield_metrics.py
+  model: code/LibMTL/model/sensorfield_m3t.py
+  dataset_loader: code/examples/das_csv/sensorfield_dataset.py
+  training_entry: code/examples/das_csv/train_sensorfield_m3t.py
+  condition_split_builder: code/examples/das_csv/build_condition_splits.py
+  cross_condition_runner: code/examples/das_csv/run_cross_condition_protocols.py
+  metrics: code/examples/das_csv/sensorfield_metrics.py

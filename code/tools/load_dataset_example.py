@@ -12,7 +12,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Load a sample from SensorField-DAS HDF5.")
     parser.add_argument(
         "--h5",
-        default=str(Path(__file__).resolve().parents[1] / "public_dataset_release" / "SensorField_DAS_v1.h5"),
+        default=str(Path(__file__).resolve().parents[2] / "public_dataset_release" / "SensorField_DAS_v1.h5"),
         help="Path to the SensorField-DAS HDF5 file.",
     )
     parser.add_argument("--index", type=int, default=0, help="Sample index to load.")
