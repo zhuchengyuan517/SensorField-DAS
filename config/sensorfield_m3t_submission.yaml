@@ -1,0 +1,88 @@
+paper:
+  title: "SensorField-M3T: Generalizable Multimodal Multi-Task Learning for Distributed Sensor-Field Perception"
+  dataset_name: SensorField-DAS
+  status: submission
+
+dataset:
+  reported_records: 13806
+  event_counts:
+    background: 5899
+    walking: 1470
+    excavator: 1957
+    driving: 4480
+  event_display_names:
+    background: background_noise
+    walking: human_activity
+    excavator: mechanical_excavation
+    driving: vehicle_driving
+  fine_labels:
+    human_activity: [walking, striking, hoeing]
+    mechanical_excavation: [construction, excavation, cutting]
+  native_sampling_rates_hz: [2000, 10000]
+  source_spatial_zones: 150
+  retained_source_channels:
+    walking: 1
+    excavator: 6
+    driving: 10
+  released_record_channels:
+    walking: 1
+    excavator: 6
+    driving: 1
+  vehicle_record_unit: channel
+  observation_window_seconds: 5
+
+preprocessing:
+  target_sampling_rate_hz: 2000
+  anti_alias_downsampling: true
+  raw_shape: [1, 10000]
+  stf_shape: [1, 224, 224]
+  gaf_shape: [1, 224, 224]
+  views: [raw, stf, gaf]
+  spatial_adapter: center
+  stf_spatial_fusion: group3_mean
+
+tasks:
+  event_type:
+    classes: [background, walking, excavator, driving]
+    label_available_for: all_samples
+  threat_location:
+    classes: [alarm, tracking, no_threat]
+    executable_labels: ["Alarm area", "Tracking area", "No-threat area"]
+    intervals_m:
+      alarm: "(0, 5]"
+      tracking: "(5, 20]"
+      no_threat: "(20, 40]"
+    label_available_for: mechanical_excavation_with_valid_distance
+    ignore_index: -1
+
+splits:
+  iid_ratio: [0.7, 0.2, 0.1]
+  iid_group_key: source_group
+  condition_disjoint: [region, soil, acquisition]
+  prevent_source_group_overlap: true
+
+training_reported_in_submission:
+  epochs: 80
+  batch_size: 8
+  optimizer: AdamW
+  learning_rate: 0.00003
+  weight_decay: 0.0005
+  scheduler: StepLR
+  checkpoint_metric: validation_mtl_score
+  num_runs: 5
+  seeds: [42, 43, 44, 45, 46]
+  num_anchors: 16
+  complement_separation: 0.05
+  task_diversity_margin: 0.05
+  representation_consistency: 0.05
+  perturbation_probability: 0.3
+
+local_paths:
+  benchmark_root: converted_csv/MTL43
+  condition_split_root: converted_csv/sensorfield_mtl43_condition_splits_strict
+  model: libmtl_das_patch/LibMTL/model/sensorfield_m3t.py
+  dataset_loader: libmtl_das_patch/examples/das_csv/create_dataset.py
+  training_entry: libmtl_das_patch/examples/das_csv/pipemmtl_main.py
+  condition_split_builder: libmtl_das_patch/examples/das_csv/build_sensorfield_condition_splits.py
+  cross_condition_runner: libmtl_das_patch/examples/das_csv/run_cross_condition_baselines.py
+  metrics: libmtl_das_patch/examples/das_csv/sensorfield_metrics.py

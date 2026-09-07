@@ -7,7 +7,7 @@ from collections import defaultdict
 from pathlib import Path
 
 
-DATASET_ROOT = Path(r"D:\proj 1\converted_csv\MTL43")
+DATASET_ROOT = Path(__file__).resolve().parent / "converted_csv" / "MTL43"
 TRAIN_RATIO = 0.7
 VAL_RATIO = 0.2
 TEST_RATIO = 0.1
@@ -57,13 +57,17 @@ def main() -> None:
     rng = random.Random(args.seed)
     grouped: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
 
-    for path in sorted((dataset_root / "walking").glob("*.csv")):
+    walking_dir = dataset_root / "walking"
+    if not walking_dir.is_dir():
+        walking_dir = dataset_root.parent / "walking"
+
+    for path in sorted(walking_dir.glob("*.csv")):
         grouped[("walking", "_")].append(
             {"path": str(path), "event_label": "walking", "distance_label": "", "sample_mode": "row"}
         )
     for path in sorted((dataset_root / "driving").glob("*.csv")):
         grouped[("driving", "_")].append(
-            {"path": str(path), "event_label": "driving", "distance_label": "", "sample_mode": "group3"}
+            {"path": str(path), "event_label": "driving", "distance_label": "", "sample_mode": "row"}
         )
     for path in sorted((dataset_root / "background").glob("*.csv")):
         grouped[("background", "_")].append(

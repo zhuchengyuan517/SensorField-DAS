@@ -1,0 +1,40 @@
+\begin{table}[t]
+\centering
+\caption{Summary of the current SensorField-DAS benchmark.}
+\label{tab:sensorfield_dataset}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabular}{p{3.2cm}p{4.0cm}p{6.1cm}}
+\toprule
+\textbf{Aspect} & \textbf{Value} & \textbf{Description} \\
+\midrule
+Dataset name & SensorField-DAS & A field-oriented DAS benchmark for multimodal and multi-task sensor-field perception under cross-condition evaluation. \\
+
+Released records & 13,806 & Includes 5,899 background-noise, 1,470 human-activity, 1,957 mechanical-excavation, and 4,480 vehicle-driving records. \\
+
+Source coverage & 150 sensing zones & Each original source recording spans a distributed sensing field with 150 spatial monitoring zones before localized sample extraction. \\
+
+Event taxonomy & 4 coarse-grained classes & \textit{background noise}, \textit{human activity}, \textit{mechanical excavation}, and \textit{vehicle driving}. \\
+
+Fine-grained labels & 6 subclasses & Human activity includes \textit{walking}, \textit{striking}, and \textit{hoeing}; mechanical excavation includes \textit{construction}, \textit{excavation}, and \textit{cutting}. \\
+
+Threat-location labels & 3 classes & Mechanical excavation records with valid distance are annotated as alarm $(0,5]$ m, tracking $(5,20]$ m, or no-threat $(20,40]$ m. Other event types are unlabeled for this task. \\
+
+Soil conditions & 3 & Supports cross-soil evaluation under heterogeneous field environments. \\
+
+Native sampling rates & 2/10 kHz & Source data are collected under 2 kHz and 10 kHz acquisition settings. \\
+
+Observation window & 5 s & Each released record corresponds to a fixed five-second sensing window for benchmarking. \\
+
+Standardized raw input & $1 \times 10000$ & Raw waveform inputs are standardized to 10,000 temporal samples for model benchmarking. \\
+
+Spatial width $C$ & $\{1,\;6\}$ & Human-activity and vehicle records are single-channel, while mechanical-excavation records retain 6 adjacent channels. Each 10-channel vehicle source field yields 10 independent records. \\
+
+Aligned modalities & 3 & Each sample provides raw waveform, space-time-frequency (STF), and Gramian angular field (GAF) representations. \\
+
+Released sample form & $X \in \mathbb{R}^{T \times C}$ & Each record preserves a localized temporal-spatial field response rather than a full raw fence matrix. \\
+
+Evaluation protocols & IID + 3 condition-disjoint protocols & The benchmark uses a source-group-disjoint 7:2:1 IID split and three condition-disjoint settings: region-level, soil-level, and acquisition-level. \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -2,221 +2,181 @@
 
 ## 1. Overview
 
-SensorField-DAS Dataset is an anonymized public dataset for distributed acoustic sensing (DAS) based infrastructure safety monitoring. The dataset is intended for academic research on event recognition, background discrimination, distance-aware analysis, and domain generalization across heterogeneous acquisition settings.
+SensorField-DAS is a real-world distributed acoustic sensing benchmark created for research on multimodal sensor-field perception and generalizable multi-task learning. The dataset accompanies the paper *SensorField-M3T: Generalizable Multimodal Multi-Task Learning for Distributed Sensor-Field Perception* and is designed as a field-oriented benchmark rather than a collection of isolated vibration snippets.
 
-This release is structured as a publication-ready research dataset rather than an internal engineering archive. The goal is to provide a reusable benchmark format while removing sensitive operational metadata and limiting the disclosure of deployment-specific infrastructure details.
+Each record preserves a localized temporal-spatial response of the sensing field together with event semantics and acquisition-condition context. The benchmark is built from cross-regional DAS acquisitions collected across multiple batches, sensing configurations, and environmental conditions.
 
-## 2. Motivation
+## 2. Why This Dataset Exists
 
-Distributed acoustic sensing has become an important sensing modality for infrastructure monitoring, especially in scenarios where weak vibrations, activity patterns, and environmental disturbances need to be analyzed over extended spatial coverage. However, public DAS datasets for infrastructure safety monitoring remain limited, particularly those that support:
+Many DAS studies operate on task-specific signal crops or single-condition datasets, which makes it difficult to evaluate how well a model generalizes across sensing regions, soil conditions, or acquisition settings. SensorField-DAS is intended to support a more realistic evaluation setting in which:
 
-- multiple event categories
-- matched background examples
-- anonymized public release
-- cross-domain evaluation across acquisition conditions
+- the sensing field is observed as a structured spatial response rather than a single trace
+- multiple physical representations of the same event are aligned at the sample level
+- coarse and fine semantic labels coexist with distance-aware threat annotations
+- condition-disjoint protocols can be used to test robustness under deployment shifts
 
-SensorField-DAS Dataset is designed to help fill that gap.
+## 3. Dataset Scale and Composition
 
-## 3. Intended Research Use
+The current dataset version contains 13,806 released records.
 
-The dataset is intended for:
+### 3.1 Coarse-Grained Event Distribution
 
-- supervised event classification
-- fine-grained activity recognition
-- background versus event discrimination
-- distance-aware recognition
-- cross-segment generalization
-- multi-domain representation learning
-- robustness evaluation under different sampling configurations and field conditions
+- `background_noise`: 5,899
+- `human_activity`: 1,470
+- `mechanical_excavation`: 1,957
+- `vehicle_driving`: 4,480
 
-## 4. Out-of-Scope Use
+### 3.2 Fine-Grained Labels
 
-The dataset is not intended to:
+Human activity labels:
 
-- expose real operational sensing layouts
-- reveal field deployment identities
-- provide access to confidential engineering metadata
-- support reverse reconstruction of protected infrastructure attributes
+- `walking`
+- `striking`
+- `hoeing`
 
-## 5. Data Source and Release Policy
+Mechanical excavation labels:
 
-The public release is derived from multi-batch DAS signal archives that include multiple acquisition conditions and environment types. During release preparation, the source corpus is processed through:
+- `construction`
+- `excavation`
+- `cutting`
 
-- filename inspection
-- label parsing
-- signal cropping
-- anonymization
-- background sample generation
-- HDF5 packaging
-- consistency validation
+### 3.3 Threat-Location Labels
 
-Only the processed public release outputs are intended for publication.
+For mechanical excavation records, a three-level threat-location label is provided:
 
-## 6. Sample Construction
+- `alarm`: `(0, 5] m`
+- `tracking`: `(5, 20] m`
+- `no_threat`: `(20, 40] m`
 
-The public dataset does not preserve complete raw fence-level matrices.
+These labels are only available for mechanical-excavation samples with a valid source-to-fiber distance. Background, human-activity, and vehicle-driving records are unlabeled for this task and are excluded from its loss and evaluation.
 
-Instead, each public sample is constructed as a cropped DAS zone window:
+### 3.4 Acquisition Characteristics
 
-- for positive event samples, the release keeps only the event-related zone segment
-- for background samples, the release crops non-event zone segments from the same source file
-- background crops are matched in zone-window length to the positive crop
-- the final public sample is stored in `[T, C]` format
+- Soil conditions: 3
+- Native sampling rates: 2 kHz and 10 kHz
+- Raw source coverage: 150 spatial monitoring zones per source recording
+- Retained released spatial widths: `1`, `6`, and `10` channels
+- Observation duration: 5 seconds per released record
 
-Where:
+## 4. Source Recordings and Preprocessing
 
-- `T` is temporal length
-- `C` is the retained zone-window width
+Each original DAS source recording spans a long sensing field and therefore contains both event-relevant responses and a large amount of unrelated spatial background. SensorField-DAS is constructed by first localizing the most event-relevant spatial neighborhood and then retaining an event-dependent number of adjacent sensing channels.
 
-This release strategy improves privacy protection and better aligns the dataset with model-training use cases.
+- Human activity retains 1 channel.
+- Mechanical excavation retains 6 adjacent channels.
+- Vehicle source fields retain 10 adjacent channels, which are released as 10 independent single-channel records.
+- Background samples are taken from non-event regions using the same spatial width as the matched event configuration.
 
-## 7. Label Taxonomy
+The released record is represented as `X in R^(T x C)`, where `T` is the temporal length and `C` is the retained spatial width. This organization reduces redundant field observations while preserving localized spatial structure.
 
-### 7.1 Coarse-Grained Event Labels
+## 5. Modalities
 
-The primary event labels are:
+Each sample is represented by three aligned modalities:
 
-- `background_noise`
-- `pipeline_leakage`
-- `mechanical_excavation`
-- `manual_work`
-- `vehicle_passing`
+- `Raw waveform`: preserves native temporal dynamics and inter-channel variation.
+- `STF`: a space-time-frequency representation describing spectral energy evolution across time and sensing positions.
+- `GAF`: a Gramian angular field representation highlighting temporal correlation patterns in an image-like form.
 
-### 7.2 Fine-Grained Event Labels
+These three modalities describe complementary aspects of the same physical field response and are intended for multimodal fusion and representation analysis.
 
-When supported by source naming rules, the dataset may include:
+## 6. Standardized Benchmark Inputs
 
-- `excavator_idle`
-- `knocking`
-- `digging`
-- `parallel_driving`
-- `crossing`
-- `manual_digging`
-- `manual_walking`
-- `vehicle_idle`
-- `vehicle_passing`
-- `N/A`
-- `unknown`
+For benchmark experiments, all records are mapped to a fixed 5-second observation window.
 
-### 7.3 Additional Metadata Labels
+- Raw records acquired at 2 kHz contain 10,000 temporal samples.
+- Raw records originally acquired at 10 kHz are downsampled to 2 kHz with anti-aliasing filtering.
+- Each raw input is therefore standardized to `1 x 10000`.
+- STF and GAF inputs are constructed as single-channel maps and resized to `1 x 224 x 224`.
 
-The release may also provide:
+This preprocessing keeps a consistent physical duration across conditions while preserving modality-specific structure.
 
-- `distance_label`
-- `distance_value_m`
-- `soil_condition`
-- `segment_id`
-- `sampling_rate_hz`
-- `is_background`
-- `has_distance_label`
+## 7. Supported Learning Tasks
 
-## 8. Anonymization
+### 7.1 Task 1: Event-Type Classification
 
-The public release removes or anonymizes sensitive metadata, including:
+The first task is a four-way event classification problem over:
 
-- original source paths
-- original filenames
-- real dates
-- project identifiers
-- station names
-- geographic markers
-- GPS references
-- defense-zone identifiers
-- pipe diameter and engineering-sensitive field attributes
+- background noise
+- human activity
+- mechanical excavation
+- vehicle driving
 
-Only hashed or remapped identifiers are retained where necessary for integrity, grouping, or traceability in the local build process.
+### 7.2 Task 2: Threat-Location Estimation
 
-## 9. Data Format
+The second task is a three-way threat-location classification problem defined for mechanical excavation samples:
 
-The public dataset is packaged into an HDF5 file with structured groups for:
+- alarm zone
+- tracking zone
+- no-threat zone
 
-- signal storage
-- labels
-- metadata
-- quality control
-- split definitions
-- label maps
+Together, these tasks enable joint learning of semantic recognition and distance-aware spatial inference.
 
-This organization is intended to support efficient training, reproducible evaluation, and straightforward downstream loading in Python-based research pipelines.
+## 8. Evaluation Protocols
 
-## 10. Quality Control
+The current benchmark version supports both standard and condition-shift evaluation.
 
-During release construction, the pipeline performs multiple checks, including:
+### 8.1 IID Protocol
 
-- numeric-column extraction from CSV inputs
-- NaN and Inf handling
-- per-sample signal quality statistics
-- structural consistency checks across HDF5 groups
-- split-index validation
-- leakage checks for sensitive strings or path metadata
+The in-distribution protocol uses a train/validation/test split at a ratio of `7:2:1`. Source-group identifiers associate samples with their originating continuous recording, acquisition session, and physical event; a source group must not appear in more than one split.
 
-Samples that fail public-release requirements may be skipped, while recoverable issues may be retained together with warning annotations.
+### 8.2 Condition-Disjoint Protocols
 
-## 11. Splits and Evaluation
+To evaluate generalization under deployment shifts, the benchmark further defines:
 
-The release is designed to support multiple evaluation settings:
+- `Region-level`: train and test partitions are disjoint in sensing region
+- `Soil-level`: train and test partitions are disjoint in soil condition
+- `Acquisition-level`: train and test partitions are disjoint in acquisition setting
 
-- random split
-  - standard supervised benchmarking with approximate train/validation/test partitioning
-- segment holdout
-  - evaluation on unseen anonymous acquisition segments
-- cross-segment folds
-  - repeated cross-domain validation across anonymous segments
+These protocols are intended to reveal whether a model remains reliable when the sensing environment changes.
 
-These splits are intended to support fairer comparison under both standard and domain-shift conditions.
+## 9. Data Packaging
 
-## 12. Limitations
+The executable paper benchmark is organized through CSV manifests and on-the-fly Raw/STF/GAF construction. The paper-aligned distribution package is `SensorField_DAS_v1.h5`; it contains 13,806 records and preserves the same source-group assignments used by the IID and condition-disjoint protocols. The repository also includes:
 
-Several limitations should be considered when using the dataset:
-
-- labels are derived from curated naming rules and release-time logic
-- some source files may be excluded because they do not satisfy release criteria
-- some metadata fields may be unavailable when they cannot be inferred reliably
-- public samples are cropped task-oriented signal windows rather than untouched raw full-field recordings
-- some ambiguous field patterns may be mapped conservatively to `unknown`
-
-## 13. Reproducibility and Repository Contents
-
-The repository includes:
-
-- release build scripts
 - filename inspection utilities
-- anonymization logic
-- label parsing rules
-- split generation code
+- label parsing logic
+- preprocessing and sample-construction scripts
+- statistics and reporting helpers
 - validation scripts
-- example data loading code
-- release configuration files
+- example loading code
 
-This allows the public build process to be audited and reproduced locally, subject to access to the original private source corpus.
+The build utilities are designed for local reconstruction from the private source corpus and do not alter the original raw CSV files.
 
-## 14. Maintenance
+## 10. Intended Uses
 
-Before public release, the following items should be finalized:
+SensorField-DAS is intended for research on:
 
-- public HDF5 filename and download location
-- dataset license
-- associated paper citation
-- maintainer contact information
-- any institutional or funding acknowledgements
+- event recognition in DAS-based field monitoring
+- fine-grained activity discrimination
+- distance-aware threat assessment
+- multimodal representation learning
+- multi-task learning
+- cross-condition generalization
+- robustness analysis under sensing-domain shifts
 
-## 15. Citation
+## 11. Known Limitations
 
-If you use SensorField-DAS Dataset in academic work, please cite the associated paper and the dataset repository.
+Users should keep several limitations in mind:
 
-```bibtex
-@dataset{sensorfield_das_dataset,
-  title  = {SensorField-DAS Dataset},
-  author = {To Be Added},
-  year   = {2026},
-  note   = {An anonymized public DAS dataset for infrastructure safety monitoring}
-}
-```
+- The released benchmark is a structured and localized field dataset, not a dump of untouched full-length raw recordings.
+- Threat-location labels are defined for mechanical excavation and are not uniformly applicable to every event category.
+- Some condition-disjoint evaluations may produce class-imbalance effects or missing-class cases for certain metrics.
+- Benchmark-ready inputs are standardized for comparability and may differ from the native raw acquisition format used in deployment.
+- Vehicle samples are channel-level records: 448 localized ten-channel source fields produce 4,480 independent records.
+- Historical experiment outputs may predate the finalized submission defaults; new runs should use `config/sensorfield_m3t_submission.yaml`.
 
-## 16. License
+## 12. Repository Documentation
 
-Please replace this placeholder with the final public dataset license before release.
+This repository provides three complementary entry points:
 
-```text
-License: To Be Determined
-```
+- [README.md](../README.md) for the concise repository overview
+- [dataset_card.md](dataset_card.md) for the formal long-form dataset description
+- [repository_organization.md](repository_organization.md) for the code map and submission-alignment audit notes
+
+## 13. Citation
+
+If you use SensorField-DAS in academic work, please cite the associated SensorField-M3T paper and the dataset repository. A final BibTeX entry can be added here when the publication metadata is finalized.
+
+## 14. License
+
+The final license statement should be added together with the public dataset release package.

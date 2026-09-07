@@ -1,0 +1,11 @@
+numpy>=1.26,<3
+scipy>=1.13
+scikit-learn>=1.4
+torch>=2.3
+torchvision>=0.18
+pillow>=10
+tqdm>=4.67
+matplotlib>=3.9
+openpyxl>=3.1
+pyyaml>=6
+

@@ -32,11 +32,11 @@ IGNORE_INDEX = -1
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Train SensorField-MEDHTT on the public PipeDAS HDF5 release."
+        description="Train SensorField-MEDHTT on the SensorField-DAS HDF5 release."
     )
     parser.add_argument(
         "--h5",
-        default=str(PROJECT_ROOT / "public_dataset_release" / "PipeDAS_Multi_v1.h5"),
+        default=str(PROJECT_ROOT / "public_dataset_release" / "SensorField_DAS_v1.h5"),
         type=str,
     )
     parser.add_argument("--config", default=str(PROJECT_ROOT / "config" / "label_config.yaml"), type=str)
@@ -156,11 +156,17 @@ def build_labels_and_maps(
         is_background = handle["/labels/is_background"][:].astype(bool)
         condition_raw = handle[f"/labels/{condition_label}"][:].astype(np.int64)
         quality_valid = handle["/quality/is_valid"][:].astype(bool) if "/quality/is_valid" in handle else np.ones_like(is_background)
+        hdf_label_maps = {}
+        for map_name in ("event_type", "fine_event", "distance_label", "soil_condition"):
+            raw_map = handle[f"/meta/label_maps/{map_name}_json"][()]
+            if isinstance(raw_map, bytes):
+                raw_map = raw_map.decode("utf-8")
+            hdf_label_maps[map_name] = json.loads(raw_map)
 
     event_map = compact_map(event_raw, quality_valid)
     radial_map = radial_compact_map(distance_raw, distance_value_m, quality_valid & has_distance, radial_order)
     if condition_label == "fine_event":
-        configured = config["label_maps"]["fine_event"]
+        configured = hdf_label_maps["fine_event"]
         invalid_condition_ids = {
             int(configured.get("N/A", -999)),
             int(configured.get("unknown", -998)),
@@ -182,9 +188,9 @@ def build_labels_and_maps(
     for raw_value, compact_value in condition_map.items():
         label_arrays["threat_condition"][(condition_raw == raw_value) & condition_valid] = compact_value
 
-    event_names = names_from_compact_map(event_map, invert_label_map(config["label_maps"]["event_type"]))
-    if "distance_label" in config["label_maps"]:
-        distance_names_raw = invert_label_map(config["label_maps"]["distance_label"])
+    event_names = names_from_compact_map(event_map, invert_label_map(hdf_label_maps["event_type"]))
+    if "distance_label" in hdf_label_maps:
+        distance_names_raw = invert_label_map(hdf_label_maps["distance_label"])
     else:
         distance_names_raw = {}
         for raw_value in radial_map:
@@ -198,7 +204,7 @@ def build_labels_and_maps(
     radial_names = names_from_compact_map(radial_map, distance_names_raw)
     condition_names = names_from_compact_map(
         condition_map,
-        invert_label_map(config["label_maps"][condition_label]),
+        invert_label_map(hdf_label_maps[condition_label]),
     )
     metadata = {
         "event_raw_to_compact": event_map,
