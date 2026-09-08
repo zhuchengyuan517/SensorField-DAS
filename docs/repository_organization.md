@@ -21,7 +21,7 @@ The canonical machine-readable description is `config/sensorfield_m3t_submission
 | Paper-aligned HDF5 builder | `code/data/build_dataset_release.py` |
 | Generated public dataset | `public_dataset_release/SensorField_DAS_v1.h5` |
 
-The root `scripts/build_hdf5_dataset.py`, `src/`, and `config/label_config.yaml` belong to the earlier five-class PipeDAS workflow and are retained only for provenance. The legacy `PipeDAS_Multi_v1.h5` artifact has been removed; `SensorField_DAS_v1.h5` is the paper-aligned local package.
+The earlier five-class PipeDAS scripts, MEDHTT/ImageFork branches, and obsolete plotting utilities have been removed from the publication repository. `SensorField_DAS_v1.h5` is the only paper-aligned local package; its binary is not yet hosted publicly.
 
 ## Model Code
 

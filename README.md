@@ -129,8 +129,7 @@ The paper-facing training protocol uses AdamW for 80 epochs, batch size 8, learn
 .
 |-- README.md
 |-- config/
-|   |-- sensorfield_m3t_submission.yaml
-|   `-- label_config.yaml                 # legacy PipeDAS release rules
+|   `-- sensorfield_m3t_submission.yaml
 |-- docs/
 |   |-- dataset_card.md
 |   `-- repository_organization.md
@@ -142,15 +141,6 @@ The paper-facing training protocol uses AdamW for 80 epochs, batch size 8, learn
 |-- data/
 |   |-- README.md                        # availability and download status
 |   `-- dataset_metadata.json
-|-- scripts/                              # legacy analysis utilities
-|   |-- inspect_filenames.py
-|   `-- build_hdf5_dataset.py
-|-- src/                                  # legacy release modules
-|   |-- anonymizer.py
-|   |-- hdf5_writer.py
-|   |-- label_parser.py
-|   |-- split_builder.py
-|   `-- stats_report.py
 |-- requirements.txt
 `-- requirements-model.txt
 ```
