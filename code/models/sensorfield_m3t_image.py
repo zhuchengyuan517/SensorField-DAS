@@ -17,8 +17,8 @@ try:
 except Exception:  # pragma: no cover - optional dependency at runtime
     timm = None
 
-from LibMTL.model.pipemmtl import LocationImageEncoder
-from LibMTL.model.sensorfield_m3t import SensorFieldM3T
+from models.pipe_mmtl import LocationImageEncoder
+from models.sensorfield_m3t import SensorFieldM3T
 
 
 TIMM_LOCATION_BACKBONES = {

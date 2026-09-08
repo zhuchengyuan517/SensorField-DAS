@@ -31,12 +31,15 @@ except Exception:  # pragma: no cover - optional at runtime
     Workbook = None
 
 CURRENT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = CURRENT_DIR.parents[1]
-WORKSPACE_ROOT = CURRENT_DIR.parents[2]
+CODE_ROOT = CURRENT_DIR.parent
+WORKSPACE_ROOT = CODE_ROOT.parent
+DATA_DIR = CODE_ROOT / "data"
 if str(CURRENT_DIR) not in sys.path:
     sys.path.insert(0, str(CURRENT_DIR))
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(1, str(PROJECT_ROOT))
+if str(DATA_DIR) not in sys.path:
+    sys.path.insert(1, str(DATA_DIR))
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(2, str(CODE_ROOT))
 
 from sensorfield_dataset import (
     DISTANCE_IGNORE_INDEX,
@@ -46,13 +49,13 @@ from sensorfield_dataset import (
     ensure_mtl43_manifests,
     parse_label_list,
 )
-from LibMTL.model.pipemmtl import PipeMMTL
-from LibMTL.model.sensorfield_m3t import SensorFieldM3T
-from LibMTL.model.condition_baselines import build_condition_baseline
+from models.pipe_mmtl import PipeMMTL
+from models.sensorfield_m3t import SensorFieldM3T
+from models.domain_generalization_baselines import build_condition_baseline
 from sensorfield_metrics import attach_task_metrics, classification_metrics, metric_rows
 
 DEFAULT_DATASET_PATH = WORKSPACE_ROOT / "converted_csv" / "MTL43"
-DEFAULT_SAVE_PATH = PROJECT_ROOT / "examples" / "das_csv" / "runs" / "sensorfield_m3t"
+DEFAULT_SAVE_PATH = WORKSPACE_ROOT / "results" / "sensorfield_m3t"
 DEFAULT_LOCATION_IMAGE_ROOT = WORKSPACE_ROOT / "_datasets" / "location_images"
 
 

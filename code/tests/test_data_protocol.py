@@ -9,8 +9,9 @@ import torch
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-EXAMPLES_DIR = PROJECT_ROOT / "examples" / "das_csv"
-for path in (PROJECT_ROOT, EXAMPLES_DIR):
+DATA_DIR = PROJECT_ROOT / "data"
+TRAINING_DIR = PROJECT_ROOT / "training"
+for path in (PROJECT_ROOT, DATA_DIR, TRAINING_DIR):
     if str(path) not in sys.path:
         sys.path.insert(0, str(path))
 
@@ -19,7 +20,7 @@ from sensorfield_dataset import (  # noqa: E402
     MultiTaskCSVDataset,
     canonicalize_dataset_manifests,
 )
-from LibMTL.model import SensorFieldM3T  # noqa: E402
+from models import SensorFieldM3T  # noqa: E402
 from sensorfield_metrics import classification_metrics  # noqa: E402
 
 

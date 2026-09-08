@@ -135,12 +135,13 @@ The paper-facing training protocol uses AdamW for 80 epochs, batch size 8, learn
 |   |-- dataset_card.md
 |   `-- repository_organization.md
 |-- code/
-|   |-- LibMTL/model/sensorfield_m3t.py
-|   |-- examples/das_csv/sensorfield_dataset.py
-|   |-- examples/das_csv/train_sensorfield_m3t.py
-|   |-- examples/das_csv/run_submission_protocol.py
-|   |-- tests/
-|   `-- tools/
+|   |-- models/                          # models and FAC/TAEF/GCTI implementation
+|   |-- data/                            # dataset construction and loading
+|   |-- training/                        # training and evaluation protocols
+|   `-- tests/
+|-- data/
+|   |-- README.md                        # availability and download status
+|   `-- dataset_metadata.json
 |-- scripts/                              # legacy analysis utilities
 |   |-- inspect_filenames.py
 |   `-- build_hdf5_dataset.py
@@ -166,7 +167,7 @@ python -m pip install -r requirements-model.txt
 Audit the local assets against the current submission:
 
 ```powershell
-python code/tools/audit_dataset_alignment.py
+python code/data/audit_dataset_alignment.py
 ```
 
 Run focused model and protocol tests:
@@ -177,10 +178,12 @@ python -m unittest discover -s code/tests -p "test_*.py"
 
 ## HDF5 Release
 
+The binary HDF5 dataset is not currently hosted in this repository, and no public download URL has been issued. See [Data Availability](data/README.md) for the current release status, verified local metadata, and the planned GitHub Release download method.
+
 Build the paper-aligned SensorField-DAS package from the curated manifests:
 
 ```powershell
-python code/tools/build_dataset_release.py `
+python code/data/build_dataset_release.py `
   --dataset-root "<PRIVATE_CSV_ROOT>\MTL43" `
   --condition-root "<PRIVATE_CSV_ROOT>\sensorfield_mtl43_condition_splits_strict" `
   --output "<LOCAL_OUTPUT_ROOT>\SensorField_DAS_v1.h5" `
@@ -190,7 +193,7 @@ python code/tools/build_dataset_release.py `
 Validate its structure, paper-reported counts, vehicle record shape, source-group isolation, label maps, and metadata safety:
 
 ```powershell
-python code/tools/validate_dataset_release.py `
+python code/data/validate_dataset_release.py `
   --h5 "<LOCAL_OUTPUT_ROOT>\SensorField_DAS_v1.h5"
 ```
 

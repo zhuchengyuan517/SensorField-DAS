@@ -5,7 +5,7 @@ from typing import Any
 import torch
 import torch.nn as nn
 
-from LibMTL.model.pipemmtl import (
+from models.pipe_mmtl import (
     CrossAttentionBlock,
     GAFEncoder,
     LocationImageEncoder,

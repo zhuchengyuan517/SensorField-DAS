@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from LibMTL.model.sensorfield_m3t import (
+from models.sensorfield_m3t import (
     ALLOWED_VIEW_NAMES,
     ImageTokenEncoder2D,
     RawSignalEncoder1D,

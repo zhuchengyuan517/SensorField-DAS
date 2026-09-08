@@ -19,12 +19,12 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, Dataset
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[3]
-LIB_ROOT = PROJECT_ROOT / "code"
-if str(LIB_ROOT) not in sys.path:
-    sys.path.insert(0, str(LIB_ROOT))
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+CODE_ROOT = PROJECT_ROOT / "code"
+if str(CODE_ROOT) not in sys.path:
+    sys.path.insert(0, str(CODE_ROOT))
 
-from LibMTL.model import SensorFieldMEDHTT, ordinal_predictions  # noqa: E402
+from models import SensorFieldMEDHTT, ordinal_predictions  # noqa: E402
 
 
 IGNORE_INDEX = -1

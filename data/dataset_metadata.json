@@ -1,0 +1,19 @@
+{
+  "dataset_name": "SensorField-DAS",
+  "version": "v1.0",
+  "filename": "SensorField_DAS_v1.h5",
+  "availability": "not_yet_public",
+  "download_url": null,
+  "total_records": 13806,
+  "event_type_counts": {
+    "background_noise": 5899,
+    "human_activity": 1470,
+    "mechanical_excavation": 1957,
+    "vehicle_driving": 4480
+  },
+  "vehicle_record_unit": "one_channel_per_record",
+  "observation_window_seconds": 5,
+  "standardized_sampling_rate_hz": 2000,
+  "approximate_size_mib": 726.01,
+  "sha256": "811cb5a7ce5e539089bb0d84d067fd293e700e821fb6358e14dba28f62c266e8"
+}

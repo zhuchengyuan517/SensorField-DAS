@@ -15,10 +15,10 @@ The canonical machine-readable description is `config/sensorfield_m3t_submission
 | Paper benchmark | `converted_csv/MTL43/` |
 | IID manifests | `converted_csv/MTL43/{train,val,test}.csv` |
 | Strict condition splits | `converted_csv/sensorfield_mtl43_condition_splits_strict/` |
-| CSV dataset and Raw/STF/GAF construction | `code/examples/das_csv/sensorfield_dataset.py` |
-| Condition-disjoint split builder | `code/examples/das_csv/build_condition_splits.py` |
-| Submission alignment audit | `code/tools/audit_dataset_alignment.py` |
-| Paper-aligned HDF5 builder | `code/tools/build_dataset_release.py` |
+| CSV dataset and Raw/STF/GAF construction | `code/data/sensorfield_dataset.py` |
+| Condition-disjoint split builder | `code/data/build_condition_splits.py` |
+| Submission alignment audit | `code/data/audit_dataset_alignment.py` |
+| Paper-aligned HDF5 builder | `code/data/build_dataset_release.py` |
 | Generated public dataset | `public_dataset_release/SensorField_DAS_v1.h5` |
 
 The root `scripts/build_hdf5_dataset.py`, `src/`, and `config/label_config.yaml` belong to the earlier five-class PipeDAS workflow and are retained only for provenance. The legacy `PipeDAS_Multi_v1.h5` artifact has been removed; `SensorField_DAS_v1.h5` is the paper-aligned local package.
@@ -27,12 +27,12 @@ The root `scripts/build_hdf5_dataset.py`, `src/`, and `config/label_config.yaml`
 
 | Purpose | Canonical local path |
 | --- | --- |
-| SensorField-M3T model | `code/LibMTL/model/sensorfield_m3t.py` |
-| Training and evaluation entry | `code/examples/das_csv/train_sensorfield_m3t.py` |
-| Metrics and MTLScore | `code/examples/das_csv/sensorfield_metrics.py` |
-| Submission protocol runner | `code/examples/das_csv/run_submission_protocol.py` |
-| Multi-seed protocol runner | `code/examples/das_csv/run_multiseed_experiments.py` |
-| Cross-condition runner | `code/examples/das_csv/run_cross_condition_protocols.py` |
+| SensorField-M3T model | `code/models/sensorfield_m3t.py` |
+| Training and evaluation entry | `code/training/train_sensorfield_m3t.py` |
+| Metrics and MTLScore | `code/training/sensorfield_metrics.py` |
+| Submission protocol runner | `code/training/run_submission_protocol.py` |
+| Multi-seed protocol runner | `code/training/run_multiseed_experiments.py` |
+| Cross-condition runner | `code/training/run_cross_condition_protocols.py` |
 | Core model tests | `code/tests/test_sensorfield_m3t.py` |
 | Data/protocol tests | `code/tests/test_data_protocol.py` |
 
@@ -60,7 +60,7 @@ The current executable path is aligned as follows:
 ## Recommended Local Checks
 
 ```powershell
-python code/tools/audit_dataset_alignment.py
+python code/data/audit_dataset_alignment.py
 python -m unittest discover -s code/tests -p "test_*.py"
 ```
 

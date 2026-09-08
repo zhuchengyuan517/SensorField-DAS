@@ -1,4 +1,4 @@
-from LibMTL.model.das_multimodal_net import (
+from models.multimodal_baseline import (
     DASMultiModalNet,
     DASLossOutput,
     FocalLoss,

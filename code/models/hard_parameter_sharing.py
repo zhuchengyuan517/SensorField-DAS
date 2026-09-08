@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from LibMTL.model.pipemmtl import LocationImageEncoder
+from models.pipe_mmtl import LocationImageEncoder
 
 
 class HPSImageFork(nn.Module):

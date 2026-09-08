@@ -12,8 +12,8 @@ try:
 except Exception:  # pragma: no cover - optional dependency at runtime
     timm = None
 
-from LibMTL.model.pipemmtl import GAFEncoder, STFTEncoder, TimeStatisticsEncoder
-from LibMTL.model.sensorfield_m3t_imagefork import build_location_image_encoder
+from models.pipe_mmtl import GAFEncoder, STFTEncoder, TimeStatisticsEncoder
+from models.sensorfield_m3t_image import build_location_image_encoder
 
 
 def _extract_csv_signal(csv_inputs: torch.Tensor | None) -> torch.Tensor | None:

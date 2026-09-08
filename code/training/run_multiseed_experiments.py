@@ -10,8 +10,8 @@ from run_submission_protocol import BASE_ARGS, BOOL_FLAG_KEYS, CASES
 
 
 CURRENT_DIR = Path(__file__).resolve().parent
-PROJECT_ROOT = CURRENT_DIR.parents[1]
-WORKSPACE_ROOT = CURRENT_DIR.parents[2]
+CODE_ROOT = CURRENT_DIR.parent
+WORKSPACE_ROOT = CODE_ROOT.parent
 DEFAULT_ENTRY_SCRIPT = CURRENT_DIR / "train_sensorfield_m3t.py"
 DEFAULT_SAVE_ROOT = WORKSPACE_ROOT / "results" / f"sensorfield_m3t_tpami_v2_{datetime.now().strftime('%Y%m%d_%H%M%S')}" / "runs"
 DEFAULT_DATASET_ROOT = WORKSPACE_ROOT / "converted_csv" / "MTL43"

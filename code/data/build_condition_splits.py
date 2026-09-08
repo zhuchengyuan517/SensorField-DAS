@@ -12,7 +12,7 @@ import numpy as np
 from sklearn.model_selection import StratifiedGroupKFold
 
 
-WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
+WORKSPACE_ROOT = Path(__file__).resolve().parents[2]
 SPLIT_FILENAMES = ("train.csv", "val.csv", "test.csv")
 SOIL_TOKENS = ("land", "sand", "shizi")
 BEHAVIOR_HINTS = (
